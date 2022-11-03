@@ -1,0 +1,60 @@
+version: "3.9"
+services:
+  fido2server:
+    build: ./fido2server
+    image: darkedges/fido2server_base
+  openldap:
+    build: ./openldap
+    image: darkedges/f2s_openldap
+    container_name: openldap
+    networks:
+      - f2s
+    depends_on:
+      - "fido2server"
+    ports:
+      - '1389:1389'
+      - '1636:1636'
+    environment:
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=adminpassword
+      - LDAP_USERS=mariadb
+      - LDAP_PASSWORDS=adminpassword
+    volumes:
+      - 'openldap_data:/bitnami/openldap'
+  mariadb:
+    build: ./mariadb
+    image: darkedges/f2s_mariadb
+    container_name: mariadb
+    networks:
+      - f2s
+    depends_on:
+      - "openldap"
+    environment:
+      - MARIADB_ROOT_PASSWORD=root-password
+      - MARIADB_GALERA_MARIABACKUP_PASSWORD=backup-password
+      - MARIADB_USER=mariadb
+      - MARIADB_DATABASE=customdatabase
+      - MARIADB_ENABLE_LDAP=yes
+      - LDAP_URI=ldap://openldap:1389
+      - LDAP_BASE=dc=example,dc=org
+      - LDAP_BIND_DN=cn=admin,dc=example,dc=org
+      - LDAP_BIND_PASSWORD=adminpassword
+    volumes:
+      - 'mariadb_data:/bitnami/mariadb'
+    # glassfish:
+    #   build: ./glassfish
+    #   image: darkedges/f2s_glassfish
+    #   container_name: glassfish
+    #   networks:
+    #     - f2s
+    #   depends_on:
+    #     - "fido2server"
+
+volumes:
+  openldap_data:
+    driver: local
+  mariadb_data:
+    driver: local
+networks:
+  f2s:
+    driver: bridge
