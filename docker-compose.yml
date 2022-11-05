@@ -22,26 +22,22 @@ services:
       - LDAP_CUSTOM_SCHEMA_FILE=/tmp/fido2server/local.ldif
     volumes:
       - 'openldap_data:/bitnami/openldap'
-    # mariadb:
-    #   build: ./mariadb
-    #   image: darkedges/f2s_mariadb
-    #   container_name: mariadb
-    #   networks:
-    #     - f2s
-    #   depends_on:
-    #     - "openldap"
-    #   environment:
-    #     - MARIADB_ROOT_PASSWORD=root-password
-    #     - MARIADB_GALERA_MARIABACKUP_PASSWORD=backup-password
-    #     - MARIADB_USER=mariadb
-    #     - MARIADB_DATABASE=customdatabase
-    #     - MARIADB_ENABLE_LDAP=yes
-    #     - LDAP_URI=ldap://openldap:1389
-    #     - LDAP_BASE=dc=example,dc=org
-    #     - LDAP_BIND_DN=cn=admin,dc=example,dc=org
-    #     - LDAP_BIND_PASSWORD=adminpassword
-    #   volumes:
-    #     - 'mariadb_data:/bitnami/mariadb'
+  mariadb:
+    build: ./mariadb
+    image: darkedges/f2s_mariadb
+    container_name: mariadb
+    networks:
+      - f2s
+    depends_on:
+      - "openldap"
+    environment:
+      - MARIADB_ROOT_PASSWORD=BigKahuna
+      - MARIADB_GALERA_MARIABACKUP_PASSWORD=BigKahuna
+      - MARIADB_USER=skfsdbuser
+      - MARIADB_PASSWORD=AbracaDabra
+      - MARIADB_DATABASE=skfs
+    volumes:
+      - 'mariadb_data:/bitnami/mariadb'
     # glassfish:
     #   build: ./glassfish
     #   image: darkedges/f2s_glassfish
