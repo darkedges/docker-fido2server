@@ -11,7 +11,7 @@ JWT_KEY_VALIDITY=365
 POLICY_DOMAINS=ALL	
 RPID=strongkey.com
 
-set -eux
+set -eu
 if is_boolean_yes "$(get_galera_cluster_bootstrap_value)"; then
     wait_for_mysql_access "$DB_ROOT_USER"
     cd /tmp/fido2server
@@ -57,4 +57,4 @@ if is_boolean_yes "$(get_galera_cluster_bootstrap_value)"; then
     mysql_execute "$DB_DATABASE" "$DB_ROOT_USER" "$DB_ROOT_PASSWORD" < server.sql
 fi
 
-set +eux
+set +eu

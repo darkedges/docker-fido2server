@@ -22,14 +22,16 @@ services:
       - LDAP_CUSTOM_SCHEMA_FILE=/tmp/fido2server/local.ldif
     volumes:
       - 'openldap_data:/bitnami/openldap'
+    healthcheck:
+      interval: 10s
+      timeout: 5s
+      retries: 5
   mariadb:
     build: ./mariadb
     image: darkedges/f2s_mariadb
     container_name: mariadb
     networks:
       - f2s
-    depends_on:
-      - "openldap"
     environment:
       - MARIADB_ROOT_PASSWORD=BigKahuna
       - MARIADB_GALERA_MARIABACKUP_PASSWORD=BigKahuna
@@ -38,14 +40,30 @@ services:
       - MARIADB_DATABASE=skfs
     volumes:
       - 'mariadb_data:/bitnami/mariadb'
-    # glassfish:
-    #   build: ./glassfish
-    #   image: darkedges/f2s_glassfish
-    #   container_name: glassfish
-    #   networks:
-    #     - f2s
-    #   depends_on:
-    #     - "fido2server"
+    healthcheck:
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  glassfish:
+    build: ./glassfish
+    image: darkedges/f2s_glassfish
+    container_name: glassfish
+    networks:
+      - f2s
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      openldap:
+        condition: service_healthy
+
+    environment:
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=newpass
+      - POSTBOOT_COMMANDS=/usr/local/strongkey/scripts/post-boot-commands.asadmin
+      - PREBOOT_COMMANDS=/usr/local/strongkey/scripts/pre-boot-commands.asadmin
+    ports:
+      - '8080:8080'
+      - '4848:4838'
 
 volumes:
   openldap_data:

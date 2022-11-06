@@ -4,3 +4,5 @@ FROM bitnami/mariadb-galera:latest
 
 COPY init/ /docker-entrypoint-initdb.d/
 COPY --chown=1001:1001 --from=f2s_base /tmp/fido2server/fidoserverSQL/ /tmp/fido2server/
+
+HEALTHCHECK CMD mysqladmin ping -h localhost -u ${MARIADB_USER} -p${MARIADB_PASSWORD}

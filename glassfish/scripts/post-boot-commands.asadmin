@@ -1,0 +1,9 @@
+set server.network-config.network-listeners.network-listener.http-listener-1.enabled=false
+set server.network-config.protocols.protocol.http-listener-2.http.request-timeout-seconds=7200
+set server.network-config.protocols.protocol.http-listener-2.ssl.ssl3-tls-ciphers=+TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,+TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,+TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,+TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,+TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,+TLS_DHE_RSA_WITH_AES_256_CBC_SHA
+set server.network-config.protocols.protocol.http-listener-2.ssl.ssl2-enabled=false
+set server.network-config.protocols.protocol.http-listener-2.ssl.ssl3-enabled=false
+set server.network-config.protocols.protocol.http-listener-2.ssl.tls-enabled=false
+set server.network-config.protocols.protocol.http-listener-2.ssl.tls11-enabled=false
+set server.network-config.protocols.protocol.http-listener-2.http.trace-enabled=false
+set server.network-config.protocols.protocol.http-listener-2.http.xpowered-by=false
